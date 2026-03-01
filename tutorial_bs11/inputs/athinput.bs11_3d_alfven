@@ -1,0 +1,78 @@
+<comment>
+Bai & Stone 2011 (ApJ 736, 144) -- Section 2.3.2: Damping of MHD Waves
+3D oblique Alfven wave, rightgoing (wave_flag=5)
+
+Domain [0, sqrt(3)]^3  (cube):
+  ang_3 = atan(x1size/x2size) = atan(1) = 45 deg
+  ang_2 = atan(0.5*(x1*cos_a3+x2*sin_a3)/x3) = atan(1/sqrt(2)) ~ 35.26 deg
+  cos_a2 = sqrt(2/3),  sin_a2 = 1/sqrt(3)
+  cos_a3 = sin_a3 = 1/sqrt(2)
+  lx = x1*cos_a2*cos_a3 = sqrt(3)*(sqrt(2/3))*(1/sqrt(2)) = 1.0  --> k_par = 2*pi (same as 1D/2D)
+
+Grid-frame background (for amplitude extraction):
+  B1_grid =  bx0*cos_a2*cos_a3 - by0*sin_a3 - bz0*sin_a2*cos_a3 ~ -0.6268
+  B2_grid =  bx0*cos_a2*sin_a3 + by0*cos_a3 - bz0*sin_a2*sin_a3 ~  1.3732
+  B3_grid =  bx0*sin_a2 + bz0*cos_a2                             ~  0.9856
+
+Analytic damping rate: Gamma_A = 2*pi^2/100 ~= 0.197 (identical to 1D/2D)
+
+tlim: actual_tlim = tlim_input * (lx / eigenvalue)
+  For Alfven (eigenvalue = vAx = 1.0): 5.0 * (1.0/1.0) = 5.0
+
+<job>
+basename  = alfven_3d
+
+<problem>
+pgen_name = linear_wave
+wave_flag = 5         # rightgoing Alfven: eigenvalue[5] = v1 + vax = 0+1 = 1.0
+amp       = 1.0e-4
+dens      = 1.0
+pgas      = 0.6
+bx0       = 1.0
+by0       = 1.41421356237309504
+bz0       = 0.5
+# no along_x1: wave along 3D cube diagonal
+
+<mesh>
+nghost    = 2
+nx1       = 32
+x1min     = 0.0
+x1max     = 1.7320508075688772    # sqrt(3)
+ix1_bc    = periodic
+ox1_bc    = periodic
+nx2       = 32
+x2min     = 0.0
+x2max     = 1.7320508075688772    # sqrt(3)
+ix2_bc    = periodic
+ox2_bc    = periodic
+nx3       = 32
+x3min     = 0.0
+x3max     = 1.7320508075688772    # sqrt(3)
+ix3_bc    = periodic
+ox3_bc    = periodic
+
+<meshblock>
+nx1 = 32
+nx2 = 32
+nx3 = 32
+
+<time>
+evolution  = dynamic
+integrator = rk2
+cfl_number = 0.4
+tlim       = 5.0     # actual_tlim = 5.0 * (1.0/1.0) = 5.0 code units
+
+<mhd>
+eos                 = ideal
+gamma               = 1.6666666666666667
+reconstruct         = plm
+rsolver             = hlld
+ambipolar_diffusion = 0.0325   # eta = B0^2/omega_a = 3.25/100
+
+<output1>
+file_type   = tab
+variable    = mhd_bcc
+data_format = %14.8e
+dt          = 0.1
+slice_x2    = 0.0
+slice_x3    = 0.0

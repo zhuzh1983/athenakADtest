@@ -21,6 +21,7 @@
 #include "refinement_criteria.hpp"
 #include "hydro/hydro.hpp"
 #include "mhd/mhd.hpp"
+#include "diffusion/ambipolar_diffusion.hpp"
 #include "z4c/z4c.hpp"
 #include "diffusion/viscosity.hpp"
 #include "diffusion/resistivity.hpp"
@@ -603,6 +604,10 @@ void Mesh::NewTimeStep(const Real tlim) {
     // resistivity timestep
     if (pmb_pack->pmhd->presist != nullptr) {
       dt = std::min(dt, (cfl_no)*(pmb_pack->pmhd->presist->dtnew) );
+    }
+    // ambipolar diffusion timestep
+    if (pmb_pack->pmhd->pambi != nullptr) {
+      dt = std::min(dt, (cfl_no)*(pmb_pack->pmhd->pambi->dtnew) );
     }
     // thermal conduction timestep
     if (pmb_pack->pmhd->pcond != nullptr) {

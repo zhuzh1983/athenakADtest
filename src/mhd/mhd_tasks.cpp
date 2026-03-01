@@ -20,6 +20,7 @@
 #include "eos/eos.hpp"
 #include "diffusion/viscosity.hpp"
 #include "diffusion/resistivity.hpp"
+#include "diffusion/ambipolar_diffusion.hpp"
 #include "diffusion/conduction.hpp"
 #include "srcterms/srcterms.hpp"
 #include "bvals/bvals.hpp"
@@ -204,6 +205,9 @@ TaskStatus MHD::Fluxes(Driver *pdrive, int stage) {
   if ((presist != nullptr) && (peos->eos_data.is_ideal)) {
     presist->AddResistiveFluxes(b0, uflx);
   }
+  if ((pambi != nullptr) && (peos->eos_data.is_ideal)) {
+    pambi->AddAmbipolarFluxes(b0, uflx);
+  }
 
   // call FOFC if necessary
   if (use_fofc) {
@@ -381,7 +385,11 @@ TaskStatus MHD::EField(Driver *pdrive, int stage) {
   if (presist != nullptr) {
     presist->AddResistiveEMFs(b0, efld);
   }
-  // TODO(@user): Add more resistive effects here
+
+  // Add ambipolar diffusion electric field (if needed)
+  if (pambi != nullptr) {
+    pambi->AddAmbipolarEMFs(b0, efld);
+  }
 
   if (psbox_b != nullptr) {
     // only execute when (2D)

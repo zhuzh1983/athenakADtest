@@ -17,3 +17,23 @@ build*/
 *~
 *.swp
 Lorene
+
+# AthenaK run log / error files
+*-errs.dat
+stdout.txt
+
+# Miscellaneous working files and intermediate directories
+ambipolar_diffusion.md
+alfven_3d_n64_smallamp-errs.dat
+docs/
+inputs/mhd/athinput.ambi_figure
+run_figure/
+run_linearwave/
+tutorial/
+test/
+
+# Intermediate/debug BS11 run directories (keep only the canonical outputs)
+tutorial_bs11/output/alfven_3d_n64_1blk/
+tutorial_bs11/output/alfven_3d_n64_newfix/
+tutorial_bs11/output/alfven_3d_n64_noad/
+tutorial_bs11/output/alfven_3d_n64_smallamp/

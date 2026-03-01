@@ -1,0 +1,60 @@
+<comment>
+Bai & Stone 2011 -- 3D Alfven wave N=64^3, SINGLE MESHBLOCK (diagnostic run)
+Tests whether instability at N=64 with 8 meshblocks is a communication bug.
+
+<job>
+basename  = alfven_3d_n64_1blk
+
+<problem>
+pgen_name = linear_wave
+wave_flag = 5
+amp       = 1.0e-4
+dens      = 1.0
+pgas      = 0.6
+bx0       = 1.0
+by0       = 1.41421356237309504
+bz0       = 0.5
+
+<mesh>
+nghost    = 2
+nx1       = 64
+x1min     = 0.0
+x1max     = 1.7320508075688772
+ix1_bc    = periodic
+ox1_bc    = periodic
+nx2       = 64
+x2min     = 0.0
+x2max     = 1.7320508075688772
+ix2_bc    = periodic
+ox2_bc    = periodic
+nx3       = 64
+x3min     = 0.0
+x3max     = 1.7320508075688772
+ix3_bc    = periodic
+ox3_bc    = periodic
+
+<meshblock>
+nx1 = 64
+nx2 = 64
+nx3 = 64
+
+<time>
+evolution  = dynamic
+integrator = rk2
+cfl_number = 0.4
+tlim       = 5.0
+
+<mhd>
+eos                 = ideal
+gamma               = 1.6666666666666667
+reconstruct         = plm
+rsolver             = hlld
+ambipolar_diffusion = 0.0325
+
+<output1>
+file_type   = tab
+variable    = mhd_bcc
+data_format = %14.8e
+dt          = 0.1
+slice_x2    = 0.0
+slice_x3    = 0.0
