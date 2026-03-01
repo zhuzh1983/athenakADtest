@@ -23,9 +23,7 @@ Lorene
 stdout.txt
 
 # Miscellaneous working files and intermediate directories
-ambipolar_diffusion.md
 alfven_3d_n64_smallamp-errs.dat
-docs/
 inputs/mhd/athinput.ambi_figure
 run_figure/
 run_linearwave/
